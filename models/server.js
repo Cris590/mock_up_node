@@ -1,26 +1,39 @@
 const express = require('express');
 const cors = require('cors');
-const {dbConnection} = require('../database/config');
+const { mysql_db } = require('../database/config_mysql');
 
 class Server {
 
     constructor() {
         this.app  = express();
         this.port = process.env.PORT;
-        this.usuariosPath = '/api/usuarios';
-        this.authPath = '/api/auth';
 
-        //Conectar a base de datos
-        this.connectDB();
+        this.paths={
+            auth:'/app/auth',
+            usuarios:'/app/usuarios',
+            productos:'/app/productos',
+            categorias:'/app/categorias'
+        }
+
+        //Conectar a base de datos mysql
+        this.connectMysql()
         // Middlewares
         this.middlewares();
         // Rutas de mi aplicación
         this.routes();
+
     }
 
-    async connectDB (){
-        console.log('Aca intentado conectarme')
-        await dbConnection();
+    async connectMysql (){
+        try {
+            await mysql_db.authenticate();
+            // await mysql_db.sync({ force: true });
+            // console.log("All models were synchronized successfully.");
+            console.log('Estoy conectado a mysql')
+
+        } catch (error) {
+            throw new Error(error)
+        }
     }
 
     middlewares() {
@@ -34,8 +47,13 @@ class Server {
     }
 
     routes() {
-        this.app.use( this.authPath, require('../routes/auth'));
-        this.app.use( this.usuariosPath, require('../routes/usuarios'));
+        
+        //Nuevas rutas
+        this.app.use( this.paths.auth, require('../routes/auth.route'));
+        this.app.use(this.paths.usuarios,require('../routes/usuarios.route'))
+        this.app.use(this.paths.productos,require('../routes/productos.route'))
+        this.app.use(this.paths.categorias,require('../routes/categorias.route'))
+       
     }
 
     listen() {
