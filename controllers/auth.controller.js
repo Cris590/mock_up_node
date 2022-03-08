@@ -39,6 +39,7 @@ const login = async(req, res = response) => {
         // Generar el JWT
         const token = await generarJWT( auxUsuario.id_usuario );
         res.json({
+            ok: true,
             usuario:{
                 id_usuario:usuario.id_usuario,
                 identificacion:usuario.identificacion,
@@ -50,7 +51,6 @@ const login = async(req, res = response) => {
         })
 
     } catch (error) {
-        console.log(error)
         res.status(500).json({
             msg: 'Comuniquese con el administrador X100'
         });
@@ -59,7 +59,35 @@ const login = async(req, res = response) => {
 }
 
 
+const renovateToken=async (req, res=response)=>{
+
+    try {
+        //Generar el JWT nuevamente.
+        let usuario=req.usuario;
+        const token = await generarJWT( req.usuario.id_usuario );
+        res.json({
+            ok: true,
+            usuario:{
+                id_usuario:usuario.id_usuario,
+                identificacion:usuario.identificacion,
+                nombre:usuario.nombre,
+                rol:usuario.id_role,
+                activo: usuario.activo
+            },
+            token
+        })
+        
+    } catch (error) {
+        res.status(500).json({
+            ok:false,
+            msg:"Token expirado o no valido"
+        })
+    }
+    
+}
+
 
 module.exports = {
-    login
+    login,
+    renovateToken
 }

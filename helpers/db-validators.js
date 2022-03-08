@@ -39,7 +39,6 @@ const existeUsuarioPorId=async (id_usuario) => {
 ////////////////////////////
 //Verificar si la identificacion del usuario ya existe
 const existeProductoPorId=async (id_producto) => {  
-  
     //Verificar que no exista un usuario
     const existeProducto=await Producto.findOne({
         where:{id_producto}
@@ -48,7 +47,6 @@ const existeProductoPorId=async (id_producto) => {
         throw new Error(`El producto con el id ${id_producto} no existe `);
     }
 }
-
 //Verificar si la identificacion del usuario ya existe
 const existeCategoriaPorId=async (id_categoria) => {  
   
@@ -66,6 +64,5 @@ module.exports ={
     esIdentificacionUnico,
     existeUsuarioPorId,
     existeProductoPorId,
-    existeCategoriaPorId,
-
+    existeCategoriaPorId
 }

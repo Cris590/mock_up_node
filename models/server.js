@@ -1,5 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+const fileUpload=require('express-fileUpload');
+
 const { mysql_db } = require('../database/config_mysql');
 
 class Server {
@@ -12,7 +14,8 @@ class Server {
             auth:'/app/auth',
             usuarios:'/app/usuarios',
             productos:'/app/productos',
-            categorias:'/app/categorias'
+            categorias:'/app/categorias',
+            upload:'/app/upload',
         }
 
         //Conectar a base de datos mysql
@@ -44,6 +47,11 @@ class Server {
         this.app.use( express.json() );
         // Directorio Público
         this.app.use( express.static('public') );
+        //Handle filesUpload
+        this.app.use(fileUpload({
+            useTempFiles : true,
+            tempFileDir : '/tmp/'
+        }));
     }
 
     routes() {
@@ -53,7 +61,10 @@ class Server {
         this.app.use(this.paths.usuarios,require('../routes/usuarios.route'))
         this.app.use(this.paths.productos,require('../routes/productos.route'))
         this.app.use(this.paths.categorias,require('../routes/categorias.route'))
-       
+        
+
+        this.app.use(this.paths.upload,require('../routes/upload.route'))
+        
     }
 
     listen() {

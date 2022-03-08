@@ -10,6 +10,9 @@ const Producto=mysql_db.define('Producto', {
     id_categoria:{
         type: DataTypes.INTEGER
     },
+    codigo:{
+        type: DataTypes.INTEGER
+    },
     nombre: {
         type:DataTypes.STRING
     },
@@ -18,6 +21,9 @@ const Producto=mysql_db.define('Producto', {
     },
     precio_venta: {
         type:DataTypes.DECIMAL(8,2)
+    },
+    imagen: {
+        type:DataTypes.STRING
     },
     activo:{
         type:DataTypes.BOOLEAN

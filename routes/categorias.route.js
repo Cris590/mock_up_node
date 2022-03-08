@@ -22,27 +22,32 @@ const router = Router();
 
 //ROUTES
 
-//Obtener producto por id 
+//Obtener categoria por id 
 router.get('/:id_categoria', categoriasGet );
 
-//Obtener todos los productos
+//Obtener todos las categorias
 router.get('/', categoriasGet );
 
-//Crear producto nuevo
+//Crear categoria nuevo
 router.post('/',[    
+    validarJWT,
     check('nombre','El nombre es obligatorio').not().isEmpty(),
     validarCampos
 ], categoriasPost );
 
-//Actualizar producto
+//Actualizar categoria
 router.put('/:id_categoria',[
+    validarJWT,
+    esAdminRole,
     check('id_categoria').custom( existeCategoriaPorId ),
     validarCampos
 ] ,categoriasPut );
 
-//Inhabilitar un producto
+//Inhabilitar un categoria
 router.delete('/:id_categoria',
-[    
+[      
+    validarJWT, 
+    esAdminRole,
     check('id_categoria').custom( existeCategoriaPorId ),
     validarCampos
 ]

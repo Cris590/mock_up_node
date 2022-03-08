@@ -36,12 +36,14 @@ const categoriasPost = async (req, res = response) => {
     
         await categoria.save();
         res.json({
-            msg: 'ok',
+            ok:true,
+            msg: 'ok - categoria guardada correctamente',
             categoria
         });
 
     } catch (error) {
         res.status(500).json({
+            ok:false,
             msg:'Comuniquese con el administrador X202'
         })
     }
@@ -74,12 +76,14 @@ const categoriasPut= async (req,res = response)=>{
         }
         await categoria.update(newCategoria)
         res.json({
+            ok:true,
             msg: 'ok - categoria actualizada correctamente',
             categoria
         });
 
     } catch (error) {
         res.status(500).json({
+            ok:false,
             msg:'Comuniquese con el administrador X203'
         })
     }
@@ -89,13 +93,16 @@ const categoriasDelete = async (req, res = response)=> {
     const {id_categoria}=req.params
     try {
         const categoria =await Categoria.findByPk(id_categoria)
-        await categoria.update({activo:false}) 
+        await categoria.update({activo:!categoria.activo}) 
+        let msg=(categoria.activo) ?  `ok - categoria ${categoria.nombre} activado correctamente`:  `ok - categoria ${categoria.nombre} borrado correctamente`
         res.json({
-            msg: `ok - categoria ${categoria.nombre} borrado correctamente`,
+            ok: true,
+            msg
         });  
 
     } catch (error) {
         res.status(500).json({
+            ok: false,
             msg:'Comuniquese con el administrador X204'
         })
     }

@@ -19,6 +19,9 @@ const Usuario=mysql_db.define('Usuario', {
     id_role:{
         type:DataTypes.INTEGER(11)
     },
+    imagen: {
+        type:DataTypes.STRING
+    },
     activo:{
         type:DataTypes.BOOLEAN
     },
